@@ -222,7 +222,7 @@ class Ui_Dialog(object):
         progress_callback.emit(0)
         xlsx_file = Path('SimData', self.lineEdit.text())
         wb_obj = openpyxl.load_workbook(xlsx_file)
-        # Read the active sheet:
+        # Read the active sheet
         sheet = wb_obj.active
         col_names = []
         for column in sheet.iter_cols(1, sheet.max_column):
@@ -230,11 +230,9 @@ class Ui_Dialog(object):
                 col_names.append(column_p.value)
         global global_col
         global_col = col_names
-        #print(col_names)
         for i_convert in range(0, len(col_names), self.spinBox.value()+1):
             for url_current in range(i_convert, i_convert+self.spinBox.value()+1):
                 if(url_current < len(col_names)):
-                    #print(url_current)
                     self.convert_thread(url_current)
                     progress_callback.emit(int ((url_current+1)*99/len(col_names)))
             global current_link
@@ -261,8 +259,7 @@ class Ui_Dialog(object):
 
     def convert_thread(self, link):
         self.link = link
-        # Pass the function to execute
-        worker = Worker(self.convertProgress, self.link)  # Any other args, kwargs are passed to the run function
+        worker = Worker(self.convertProgress, self.link)
         worker.signals.result.connect(self.print_output)
         worker.signals.finished.connect(self.thread_complete)
         worker.signals.progress.connect(self.progress_fn)
@@ -283,10 +280,6 @@ class Ui_Dialog(object):
         e_pos = html.find('"', f_pos+more)
         c1 = ws.cell(row=link+1, column=1)
         c1.value = "https://link.springer.com" + html[f_pos+more:e_pos]
-        #print("|"+str(link)+"|")
-        # if(link == 8):
-        #     print(html)
-        #     print("A:"+ c1.value)
         f_pos = html.find('<div class="cta-button-container__item">', e_pos)
         f_pos = html.find('<a href="', f_pos+1)
         more = len('<a href="')
