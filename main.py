@@ -212,12 +212,10 @@ class Ui_Dialog(object):
         self.lineEdit_2.setText(root.directory)
 
     def get_link_thread(self):
-        # Pass the function to execute
-        worker = Worker(self.convert_all)  # Any other args, kwargs are passed to the run function
+        worker = Worker(self.convert_all)
         worker.signals.result.connect(self.get_func_output)
         worker.signals.finished.connect(self.get_func_complete)
         worker.signals.progress.connect(self.get_proress_show)
-        # Execute
         self.threadpool.start(worker)
 
     def convert_all(self, progress_callback):
